@@ -11,6 +11,8 @@ class Settings(BaseSettings):
     MONGO_URI: str
     DB_NAME: str
 
+    PASSWORD_TOKEN_EXPIRE_HOUR: int
+
     model_config = SettingsConfigDict(env_file=".env")
 
 def get_settings():

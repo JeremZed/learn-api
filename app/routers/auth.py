@@ -1,48 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import JSONResponse
-from datetime import timedelta
-from fastapi.security import OAuth2PasswordRequestForm
-from app.dependencies import create_access_token, Token, get_settings, verify_token
-from app.core.models import User
-from app.dependencies import get_db
+from app.dependencies import get_settings
+from app.core.models import User, Credential, QueryResetPassword, ResetPassword
+from app.dependencies import get_db, get_token_access, get_token_password
 from app.core.tools import clean_item, hash_password, verify_password
-# from app.core.translation import translation_manager
+import time
+from bson import ObjectId
 
 router = APIRouter()
-
-@router.post("/token", response_model=Token)
-async def login_for_access_token(
-    form_data: OAuth2PasswordRequestForm = Depends(),
-    settings=Depends(get_settings)
-    ):
-    # Tu devrais ici vérifier les informations d'identification de l'utilisateur
-    # Par exemple, tu peux vérifier un mot de passe dans une base de données
-    if form_data.username == "jessica" and form_data.password == "password":  # A améliorer !
-
-        access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-        access_token = create_access_token(
-            data={"sub": form_data.username}, expires_delta=access_token_expires
-        )
-        return {"access_token": access_token, "token_type": "bearer"}
-    else:
-        raise HTTPException(status_code=401, detail="Invalid credentials")
-
-@router.post("/refresh")
-async def refresh_access_token(
-    refresh_token: str,
-    settings=Depends(get_settings)
-    ):
-
-    payload = verify_token(refresh_token)
-    username = payload.get("sub")
-    if username is None:
-        raise HTTPException(status_code=401, detail="Invalid refresh token")
-
-    # Vérifie si le refresh token est valide (par exemple, s'il est dans la base de données)
-    # et non révoqué.
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(data={"sub": username}, expires_delta=access_token_expires)
-    return {"access_token": access_token, "token_type": "bearer"}
 
 @router.post("/register")
 async def create_user(
@@ -50,6 +15,10 @@ async def create_user(
     request: Request,
     db=Depends(get_db)
     ) -> JSONResponse:
+
+    """
+        Route pour créer un compte
+    """
 
     collection = db.get_collection("users")
 
@@ -70,7 +39,106 @@ async def create_user(
 
     # item = clean_item(await collection.find_one({"_id": result.inserted_id}))
 
+    message = request.app.translator.get(request.state.current_lang, "user_created_successfully", username=user.username)
+
     return JSONResponse(status_code=201,
                         headers={"Location": location_url},
-                        content={"message": "User created successfully"}
+                        content={"message": message}
     )
+
+@router.post("/login")
+async def login(
+        credentials : Credential,
+        request: Request,
+        db=Depends(get_db),
+        settings=Depends(get_settings)
+    ) -> JSONResponse:
+
+    """
+        Route pour se connecter et obtenir un token d'accès
+    """
+
+    collection = db.get_collection("users")
+    existing_user = await collection.find_one({"email": credentials.email})
+
+    if existing_user is None:
+        message = request.app.translator.get(request.state.current_lang, "wrong_credential")
+        raise HTTPException(status_code=400, detail=message)
+
+    password_valid = verify_password(credentials.password, existing_user['password'])
+
+    if not password_valid:
+        message = request.app.translator.get(request.state.current_lang, "wrong_credential")
+        raise HTTPException(status_code=400, detail=message)
+
+    access_token = get_token_access(data={'username' : existing_user['username']}, settings=settings)
+
+    message = request.app.translator.get(request.state.current_lang, "user_logged_successfully")
+
+    return JSONResponse(
+        status_code=200,
+        content={"message" : message, "data" : {"token": access_token, "token_type": "bearer"}}
+    )
+
+@router.post("/query-reset-password")
+async def query_reset_password(
+    data : QueryResetPassword,
+    request: Request,
+    db=Depends(get_db)) -> JSONResponse:
+    """
+        Route pour réinitialiser le mot de passe
+    """
+
+    collection = db.get_collection("users")
+    existing_user = await collection.find_one({"email": data.email})
+
+    if existing_user is not None:
+        token_password = get_token_password()
+
+        update_fields = {
+            "token_password": token_password,
+            "token_password_dt": time.time()
+        }
+
+        await collection.update_one({"_id": ObjectId(existing_user['_id'])}, {"$set": update_fields})
+
+    message = request.app.translator.get(request.state.current_lang, "query_reset_password_successfully", email=data.email)
+
+    return JSONResponse(status_code=200, content={"message" : message})
+
+@router.post("/reset-password")
+async def reset_password(
+    data : ResetPassword,
+        request: Request,
+        db=Depends(get_db),
+        settings=Depends(get_settings)
+    ) -> JSONResponse:
+
+    collection = db.get_collection("users")
+    existing_user = await collection.find_one({"email": data.email, 'token_password' : data.token})
+
+    # Check de l'existence de la demande de réinitialisation de mot de passe
+    if existing_user is None:
+        message = request.app.translator.get(request.state.current_lang, "query_reset_password_not_found")
+        raise HTTPException(status_code=400, detail=message)
+
+    duration_in_seconds = time.time() - existing_user['token_password_dt']
+
+    # Convertion de la durée en seconde vers une durée en heure
+    delta = divmod(duration_in_seconds, 3600)[0]
+    if delta > settings.PASSWORD_TOKEN_EXPIRE_HOUR:
+        message = request.app.translator.get(request.state.current_lang, "query_reset_password_expired")
+        raise HTTPException(status_code=400, detail=message)
+
+    # Modification du mot de passe
+    update_fields = {
+        "password": hash_password(data.password),
+        "token_password" : None,
+        "token_password_dt": None
+    }
+
+    await collection.update_one({"_id": ObjectId(existing_user['_id'])}, {"$set": update_fields})
+
+    message = request.app.translator.get(request.state.current_lang, "reset_password_successfully", email=data.email)
+
+    return JSONResponse(status_code=200, content={"message" : message})
