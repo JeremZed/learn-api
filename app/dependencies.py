@@ -4,12 +4,16 @@ import time
 import random
 from datetime import datetime, timedelta, timezone
 from typing import Optional
-from fastapi import HTTPException
+from fastapi import HTTPException, Security, Depends, Request
+from fastapi.security import OAuth2PasswordBearer
 from app.core.config import get_settings
 from app.core.tools import hash_password
-
+from app.core.models import UserCurrent, ROLE_NONE
 from pymongo.collection import Collection
 from app.core.database import database
+from bson import ObjectId
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 def get_db() -> Collection:
@@ -25,7 +29,7 @@ def get_token_access(data:dict, settings:dict) -> dict:
 
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = generate_token(
-        data={ "username": data['username'] }, expires_delta=access_token_expires
+        data=data, expires_delta=access_token_expires
     )
 
     return access_token
@@ -53,7 +57,7 @@ def generate_token(data: dict, expires_delta: Optional[timedelta] = None ) -> st
 
 def verify_token(token: str) -> dict:
     """
-        Permet de vérifier la validité du token
+        Permet de vérifier la validité du token et de retourner celui-ci si pas de soucis
     """
     try:
         settings = get_settings()
@@ -64,20 +68,38 @@ def verify_token(token: str) -> dict:
     except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
-
-
-def get_current_user(token: str) -> dict:
+async def get_current_user(
+        request: Request,
+        token: str = Security(oauth2_scheme),
+        db=Depends(get_db)
+        ):
     """
         Permet de retourner l'utilisateur derrière le token
     """
+
+    if not token:
+        raise HTTPException(status_code=401, detail="Missing authentication token")
+
     payload = verify_token(token)
+    user_id: str = payload.get("id")
 
-    username: str = payload.get("sub")
-
-    print(username)
-    if username is None:
+    if user_id is None:
         raise HTTPException(status_code=401, detail="Token is invalid")
-    # return
-    return {"todoo" : "retourner l'utilisateur en cours..."}
 
+    collection = db.get_collection("users")
+    existing_user = await collection.find_one({"_id": ObjectId(user_id)})
+
+    user = UserCurrent(
+        username=existing_user['username'],
+        email=existing_user['email'],
+        name=existing_user['name'],
+        role=existing_user.get('role', ROLE_NONE),
+    )
+
+    request.state.current_user = user
+    return user
+
+# async def check_auth_middleware(request: Request, user=Depends(get_current_user)):
+#     request.state.current_user = user
+#     return user
 

@@ -2,14 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 
 from app.dependencies import get_db, get_current_user
 
-from app.core.models import User
 from bson import ObjectId
 from app.core.tools import clean_item
 
 router = APIRouter(
     prefix="/users",
     tags=["users"],
-    # dependencies=[Depends(get_current_user)],
+    dependencies=[Depends(get_current_user)],
     responses={404: {"description": "Not found"}},
 )
 
@@ -17,7 +16,8 @@ fake_users_db = {"plumbus": {"name": "Plumbus"}, "gun": {"name": "Portal Gun"}}
 
 
 @router.get("/")
-async def read_users():
+async def read_users(request : Request):
+    print(request.state.current_user)
     return fake_users_db
 
 @router.put(

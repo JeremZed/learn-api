@@ -1,17 +1,19 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import JSONResponse
 from app.dependencies import get_settings
-from app.core.models import User, Credential, QueryResetPassword, ResetPassword
+from app.core.models import UserCreate, Credential, QueryResetPassword, ResetPassword, ROLE_USER
 from app.dependencies import get_db, get_token_access, get_token_password
 from app.core.tools import clean_item, hash_password, verify_password
 import time
 from bson import ObjectId
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/auth",
+    tags=["auth"])
 
-@router.post("/register")
+@router.post("/register", name="auth.register")
 async def create_user(
-    user: User,
+    user: UserCreate,
     request: Request,
     db=Depends(get_db)
     ) -> JSONResponse:
@@ -31,6 +33,7 @@ async def create_user(
     # Insertion du nouvel utilisateur
     user_dict = user.model_dump()
     user_dict['password'] = hash_password(user_dict['password'])
+    user_dict['role'] = ROLE_USER
     result = await collection.insert_one(user_dict)
 
     # Création de l'url vers la fiche user
@@ -46,7 +49,7 @@ async def create_user(
                         content={"message": message}
     )
 
-@router.post("/login")
+@router.post("/login", name="auth.login")
 async def login(
         credentials : Credential,
         request: Request,
@@ -71,7 +74,8 @@ async def login(
         message = request.app.translator.get(request.state.current_lang, "wrong_credential")
         raise HTTPException(status_code=400, detail=message)
 
-    access_token = get_token_access(data={'username' : existing_user['username']}, settings=settings)
+    user = clean_item(existing_user)
+    access_token = get_token_access(data={'id' : user['id'] }, settings=settings)
 
     message = request.app.translator.get(request.state.current_lang, "user_logged_successfully")
 
@@ -80,7 +84,7 @@ async def login(
         content={"message" : message, "data" : {"token": access_token, "token_type": "bearer"}}
     )
 
-@router.post("/query-reset-password")
+@router.post("/query-reset-password", name="auth.query_reset_password")
 async def query_reset_password(
     data : QueryResetPassword,
     request: Request,
@@ -106,7 +110,7 @@ async def query_reset_password(
 
     return JSONResponse(status_code=200, content={"message" : message})
 
-@router.post("/reset-password")
+@router.post("/reset-password", name="auth.reset_password")
 async def reset_password(
     data : ResetPassword,
         request: Request,

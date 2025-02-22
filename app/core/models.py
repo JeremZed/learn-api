@@ -1,6 +1,10 @@
 from pydantic import BaseModel
 
-class User(BaseModel):
+ROLE_USER = 'user'
+ROLE_ADMIN = 'admin'
+ROLE_NONE = 'none'
+
+class UserCreate(BaseModel):
     """
         Modèle représentant les informations d'un utilisateur
     """
@@ -8,6 +12,16 @@ class User(BaseModel):
     email: str
     password: str
     name: str
+
+class UserCurrent(BaseModel):
+    """
+        Modèle représenant les informations d'un utilisateur connecté
+    """
+
+    username : str
+    email: str
+    name: str
+    role: str
 
 class Credential(BaseModel):
     """
