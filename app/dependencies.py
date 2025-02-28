@@ -8,7 +8,7 @@ from fastapi import HTTPException, Security, Depends, Request
 from fastapi.security import OAuth2PasswordBearer
 from app.core.config import get_settings
 from app.core.tools import hash_password
-from app.core.models import UserCurrent, ROLE_NONE
+from app.core.models import UserCurrent, ROLE_NONE, ROLE_ADMIN
 from pymongo.collection import Collection
 from app.core.database import database
 from bson import ObjectId
@@ -99,7 +99,17 @@ async def get_current_user(
     request.state.current_user = user
     return user
 
-# async def check_auth_middleware(request: Request, user=Depends(get_current_user)):
-#     request.state.current_user = user
-#     return user
+async def check_is_admin(request: Request):
+    """
+        Permet de checker si l'utilisateur en cours est un admin
+    """
 
+    current_user = getattr(request.state, "current_user", None)
+
+    if isinstance(current_user, UserCurrent) == False:
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    if current_user.is_admin() == False:
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    return True

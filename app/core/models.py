@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 ROLE_USER = 'user'
 ROLE_ADMIN = 'admin'
@@ -21,7 +22,10 @@ class UserCurrent(BaseModel):
     username : str
     email: str
     name: str
-    role: str
+    role: Optional[str] = ROLE_NONE
+
+    def is_admin(self):
+        return self.role == ROLE_ADMIN
 
 class Credential(BaseModel):
     """

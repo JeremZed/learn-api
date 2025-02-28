@@ -6,5 +6,6 @@
     "query_reset_password_successfully" : "Le lien de réinitialisation de mot de passe a été envoyé à l'adresse suivante : {email}",
     "reset_password_successfully" : "Mot de passe modifié avec succès",
     "query_reset_password_not_found" : "La requête de réinitialisation de mot de passe n'existe pas",
-    "query_reset_password_expired" : "Le délai de réinitialisation du mot de passe est dépassé"
+    "query_reset_password_expired" : "Le délai de réinitialisation du mot de passe est dépassé",
+    "admin_users_list_all" : "Liste des utilisateurs"
 }
