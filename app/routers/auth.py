@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from app.dependencies import get_settings
 from app.core.models import UserCreate, Credential, QueryResetPassword, ResetPassword, ROLE_USER
 from app.dependencies import get_db, get_token_access, get_token_password
-from app.core.tools import clean_item, hash_password, verify_password
+from app.core.tools import clean_item, hash_password, verify_password, get_message
 import time
 from bson import ObjectId
 
@@ -27,7 +27,7 @@ async def create_user(
     # Vérification si l'utilisateur existe déjà par son email
     existing_user = await collection.find_one({"email": user.email})
     if existing_user:
-        message = request.app.translator.get(request.state.current_lang, "email_already_registered")
+        message = get_message(request, "email_already_registered")
         raise HTTPException(status_code=400, detail=message)
 
     # Insertion du nouvel utilisateur
@@ -36,18 +36,15 @@ async def create_user(
     user_dict['role'] = ROLE_USER
     result = await collection.insert_one(user_dict)
 
-    # Création de l'url vers la fiche user
-    user_id = str(result.inserted_id)
-    location_url = request.app.url_path_for("user.get", user_id=user_id)
+    # # Création de l'url vers la fiche user
+    # user_id = str(result.inserted_id)
+    # location_url = request.app.url_path_for("user.get", user_id=user_id)
 
     # item = clean_item(await collection.find_one({"_id": result.inserted_id}))
 
-    message = request.app.translator.get(request.state.current_lang, "user_created_successfully", username=user.username)
+    message = get_message(request, "user_created_successfully", username=user.username)
 
-    return JSONResponse(status_code=201,
-                        headers={"Location": location_url},
-                        content={"message": message}
-    )
+    return JSONResponse(status_code=201, content={"message": message})
 
 @router.post("/login", name="auth.login")
 async def login(
@@ -65,19 +62,19 @@ async def login(
     existing_user = await collection.find_one({"email": credentials.email})
 
     if existing_user is None:
-        message = request.app.translator.get(request.state.current_lang, "wrong_credential")
+        message = get_message(request, "wrong_credential")
         raise HTTPException(status_code=400, detail=message)
 
     password_valid = verify_password(credentials.password, existing_user['password'])
 
     if not password_valid:
-        message = request.app.translator.get(request.state.current_lang, "wrong_credential")
+        message = get_message(request, "wrong_credential")
         raise HTTPException(status_code=400, detail=message)
 
     user = clean_item(existing_user)
     access_token = get_token_access(data={'id' : user['id'] }, settings=settings)
 
-    message = request.app.translator.get(request.state.current_lang, "user_logged_successfully")
+    message = get_message(request, "user_logged_successfully")
 
     return JSONResponse(
         status_code=200,
@@ -90,7 +87,7 @@ async def query_reset_password(
     request: Request,
     db=Depends(get_db)) -> JSONResponse:
     """
-        Route pour réinitialiser le mot de passe
+        Route pour faire une demande de réinitialisation le mot de passe
     """
 
     collection = db.get_collection("users")
@@ -106,7 +103,7 @@ async def query_reset_password(
 
         await collection.update_one({"_id": ObjectId(existing_user['_id'])}, {"$set": update_fields})
 
-    message = request.app.translator.get(request.state.current_lang, "query_reset_password_successfully", email=data.email)
+    message = get_message(request, "query_reset_password_successfully", email=data.email)
 
     return JSONResponse(status_code=200, content={"message" : message})
 
@@ -118,12 +115,16 @@ async def reset_password(
         settings=Depends(get_settings)
     ) -> JSONResponse:
 
+    """
+        Route pour réinitialiser le mot de passe
+    """
+
     collection = db.get_collection("users")
     existing_user = await collection.find_one({"email": data.email, 'token_password' : data.token})
 
     # Check de l'existence de la demande de réinitialisation de mot de passe
     if existing_user is None:
-        message = request.app.translator.get(request.state.current_lang, "query_reset_password_not_found")
+        message = get_message(request, "query_reset_password_not_found")
         raise HTTPException(status_code=400, detail=message)
 
     duration_in_seconds = time.time() - existing_user['token_password_dt']
@@ -131,7 +132,7 @@ async def reset_password(
     # Convertion de la durée en seconde vers une durée en heure
     delta = divmod(duration_in_seconds, 3600)[0]
     if delta > settings.PASSWORD_TOKEN_EXPIRE_HOUR:
-        message = request.app.translator.get(request.state.current_lang, "query_reset_password_expired")
+        message = get_message(request, "query_reset_password_expired")
         raise HTTPException(status_code=400, detail=message)
 
     # Modification du mot de passe
@@ -143,6 +144,6 @@ async def reset_password(
 
     await collection.update_one({"_id": ObjectId(existing_user['_id'])}, {"$set": update_fields})
 
-    message = request.app.translator.get(request.state.current_lang, "reset_password_successfully", email=data.email)
+    message = get_message(request, "reset_password_successfully", email=data.email)
 
     return JSONResponse(status_code=200, content={"message" : message})

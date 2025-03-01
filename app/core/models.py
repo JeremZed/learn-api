@@ -1,9 +1,21 @@
 from pydantic import BaseModel
 from typing import Optional
+from bson import ObjectId
 
 ROLE_USER = 'user'
 ROLE_ADMIN = 'admin'
 ROLE_NONE = 'none'
+
+class User(BaseModel):
+    """
+        Classe représentant l'entité User
+    """
+    id : Optional[str] = None
+    username : str
+    email: str
+    name: str
+    role: Optional[str] = ROLE_NONE
+
 
 class UserCreate(BaseModel):
     """

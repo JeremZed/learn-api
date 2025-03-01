@@ -1,7 +1,10 @@
 import bcrypt
-import json
+from fastapi import Request
+import time
+import random
+import base64
 
-def clean_item(document: dict) -> dict:
+def clean_item(document: dict, exclude: list = []) -> dict:
     """
         Permet de retourner un item mongodb sans ObjectId qui occasionne une erreur dans la sérialisation
     """
@@ -11,6 +14,10 @@ def clean_item(document: dict) -> dict:
 
     document["id"] = str(document["_id"])
     del document["_id"]
+
+    if exclude:
+        for field in exclude:
+            del document[field]
 
     return document
 
@@ -36,3 +43,19 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
         Permet de verifier le hash du mot de passe
     """
     return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
+
+def get_message(request: Request, index: str) -> str:
+    """
+        Permet de retourner la traduction disponible
+    """
+    return request.app.translator.get(request.state.current_lang, index)
+
+def generate_random_str() -> dict:
+    """
+        Permet de retourner un token de réinitialisation de mot de passe
+    """
+    t = str(time.time)
+    i = random.randint(0, 9999)
+
+    token = hash_password(f"{t}-{i}")
+    return base64.b64encode(token.encode("ascii")).decode('utf-8')

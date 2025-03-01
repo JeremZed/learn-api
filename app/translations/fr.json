@@ -7,5 +7,10 @@
     "reset_password_successfully" : "Mot de passe modifié avec succès",
     "query_reset_password_not_found" : "La requête de réinitialisation de mot de passe n'existe pas",
     "query_reset_password_expired" : "Le délai de réinitialisation du mot de passe est dépassé",
-    "admin_users_list_all" : "Liste des utilisateurs"
+    "admin_users_list_all" : "Liste des utilisateurs",
+    "admin_users_not_found" : "Utilisateur non trouvé",
+    "admin_users_updated" : "Utilisateur modifié avec succès",
+    "admin_users_email_already_exist" : "Il existe déjà un compte avec cette adresse email",
+    "admin_user_created" : "Utilisateur créé avec succès",
+    "admin_user_deleted" : "Utilisateur supprimé avec succès"
 }
