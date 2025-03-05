@@ -1,27 +1,13 @@
 from bson import ObjectId
 from datetime import datetime, timezone
+from app.repo.base import BaseRepository
 
-class UserRepository:
+class UserRepository(BaseRepository):
     def __init__(self, db):
-        self.collection = db.get_collection("users")
-
-    async def get_all_users(self, skip: int, limit: int):
-        return await self.collection.find().skip(skip).limit(limit).to_list(length=None)
-
-    async def get_user_by_id(self, user_id: str):
-        return await self.collection.find_one({"_id": ObjectId(user_id)})
+        super().__init__(db, "users")
 
     async def check_email_exists(self, email: str):
         return await self.collection.find_one({"email": email})
 
-    async def create_user(self, user_data: dict):
-        return await self.collection.insert_one(user_data)
-
-    async def update_user(self, user_id: str, update_data: dict):
-        return await self.collection.update_one({"_id": ObjectId(user_id)}, {"$set": update_data})
-
-    async def soft_delete_user(self, user_id: str):
-        return await self.collection.update_one(
-            {"_id": ObjectId(user_id)},
-            {"$set": {"deleted_at": datetime.now(timezone.utc)}}
-        )
+    async def check_token_reset_password(self, email: str, token: str):
+        return await self.collection.find_one({"email": email, 'token_password' : token})

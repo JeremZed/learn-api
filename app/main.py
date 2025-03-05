@@ -1,11 +1,13 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-import app.routers as router_front
+import app.routers as routes
 import app.routers.auth as router_auth
 from app.core.database import database
 from app.core.translation import TranslationManager
 from app.middleware import TranslateMiddleware
+
+
 
 @asynccontextmanager
 async def lifespan(app):
@@ -24,8 +26,9 @@ async def lifespan(app):
 app = FastAPI(lifespan=lifespan)
 app.add_middleware(TranslateMiddleware)
 
-app.include_router(router_front.users.router)
+app.include_router(routes.users.router)
 app.include_router(router_auth.router)
+
 
 @app.get("/")
 async def root():
