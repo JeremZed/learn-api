@@ -1,6 +1,6 @@
 from bson import ObjectId
 from datetime import datetime, timezone
-from app.repo.base import BaseRepository
+from repo.base import BaseRepository
 
 class UserRepository(BaseRepository):
     def __init__(self, db):

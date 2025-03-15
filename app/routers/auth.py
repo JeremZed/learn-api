@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import JSONResponse
-from app.dependencies import get_settings
-from app.core.models import User, ROLE_USER
-from app.core.forms.front import FormRegister, FormLogin, FormQueryResetPassword, FormResetPassword
-from app.dependencies import get_db, get_token_access, get_token_password
-from app.core.tools import clean_item, hash_password, verify_password, get_message
+from dependencies import get_settings
+from core.models import User, ROLE_USER
+from core.forms.front import FormRegister, FormLogin, FormQueryResetPassword, FormResetPassword
+from dependencies import get_db, get_token_access, get_token_password
+from core.tools import clean_item, hash_password, verify_password, get_message
 import time
 from bson import ObjectId
 
-from app.repo.user import UserRepository
-from app.routers.base_router import create_crud_routes
+from repo.user import UserRepository
+from routers.base_router import create_crud_routes
 
 router = APIRouter(prefix=f"/auth", tags=["auth"])
 
@@ -26,13 +26,13 @@ async def login(
 
     if existing_user is None:
         message = get_message(request, "wrong_credential")
-        raise HTTPException(status_code=400, detail=message)
+        raise HTTPException(status_code=400, detail={"message" : message})
 
     password_valid = verify_password(form.password, existing_user.password)
 
     if not password_valid:
         message = get_message(request, "wrong_credential")
-        raise HTTPException(status_code=400, detail=message)
+        raise HTTPException(status_code=400, detail={"message" : message})
 
     access_token = get_token_access(data={'id' : existing_user.id }, settings=settings)
 
@@ -40,7 +40,7 @@ async def login(
 
     return JSONResponse(
         status_code=200,
-        content={"message" : message, "data" : {"token": access_token, "token_type": "bearer"}}
+        content={"message" : message, "data" : {"token": access_token, "token_type": "Bearer"}}
     )
 
 @router.post("/register", name="auth.register")

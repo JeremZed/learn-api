@@ -2,8 +2,8 @@ from typing import Optional, Callable, Dict
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import JSONResponse
 
-from app.core.tools import get_message, clean_item
-from app.dependencies import get_db
+from core.tools import get_message, clean_item
+from dependencies import get_db
 
 HooksType = Dict[str, Optional[Callable]]
 FormsType = Dict[str, Optional[Callable]]

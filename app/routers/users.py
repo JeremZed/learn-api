@@ -1,10 +1,10 @@
 from fastapi import  HTTPException, Depends
-from app.dependencies import get_current_user, check_is_admin
-from app.core.models import  User
-from app.core.forms.admin import FormRegister
-from app.repo.user import UserRepository
-from app.core.tools import get_message, clean_item, hash_password
-from app.routers.base_router import create_crud_routes
+from dependencies import get_current_user, check_is_admin
+from core.models import  User
+from core.forms.admin import FormRegister
+from repo.user import UserRepository
+from core.tools import get_message, clean_item, hash_password
+from routers.base_router import create_crud_routes
 
 
 # DEFINTION DES HOOKS

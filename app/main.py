@@ -1,12 +1,12 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
-import app.routers as routes
-import app.routers.auth as router_auth
-from app.core.database import database
-from app.core.translation import TranslationManager
-from app.middleware import TranslateMiddleware
-
+import routers as routes
+import routers.auth as router_auth
+from core.database import database
+from core.translation import TranslationManager
+from middleware import TranslateMiddleware
 
 
 @asynccontextmanager
@@ -24,6 +24,16 @@ async def lifespan(app):
     await database.disconnect()
 
 app = FastAPI(lifespan=lifespan)
+
+# Autoriser le frontend Vue.js à appeler l'API
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Remplace "*" par "http://localhost:5173" en production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.add_middleware(TranslateMiddleware)
 
 app.include_router(routes.users.router)

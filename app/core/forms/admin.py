@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
-from app.core.models import ROLE_NONE
+from core.models import ROLE_NONE
 
 
 class FormRegister(BaseModel):

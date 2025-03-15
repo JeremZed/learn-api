@@ -6,11 +6,11 @@ from datetime import datetime, timedelta, timezone
 from typing import Optional
 from fastapi import HTTPException, Security, Depends, Request
 from fastapi.security import OAuth2PasswordBearer
-from app.core.config import get_settings
-from app.core.tools import hash_password
-from app.core.models import UserCurrent, ROLE_NONE, ROLE_ADMIN
+from core.config import get_settings
+from core.tools import hash_password
+from core.models import UserCurrent, ROLE_NONE, ROLE_ADMIN
 from pymongo.collection import Collection
-from app.core.database import database
+from core.database import database
 from bson import ObjectId
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
