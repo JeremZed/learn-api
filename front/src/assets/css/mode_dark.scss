@@ -1,0 +1,19 @@
+
+[data-mode="dark"] {
+
+  --color-surface-a0: #121212;
+  --color-surface-a10: #282828;
+  --color-surface-a20: #3f3f3f;
+  --color-surface-a30: #575757;
+  --color-surface-a40: #717171;
+  --color-surface-a50: #8b8b8b;
+
+  --text-color-dark: #000000;
+  --text-color-light: #ffffff;
+
+  body{
+    color : var(--text-color-light);
+  }
+
+}
+

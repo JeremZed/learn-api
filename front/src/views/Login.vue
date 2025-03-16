@@ -2,7 +2,7 @@
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import api from "@/api.js";
-import { store } from "@/store.js";
+import store from "@/stores/index.js";
 
 const router = useRouter();
 
@@ -15,7 +15,7 @@ const form = reactive({
 const errorMessage = ref("");
 
 const login = async () => {
-  errorMessage.value = ""; // Reset erreur
+  errorMessage.value = "";
 
   try {
         const response = await api.post("/auth/login", {
@@ -30,7 +30,7 @@ const login = async () => {
         }
 
         // Stocker l'utilisateur dans le store
-        store.setUser(null, data.data);
+        store.user.setUser(null, data.data);
 
         // Redirection après connexion
         router.push("/");
