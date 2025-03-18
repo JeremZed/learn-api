@@ -1,7 +1,114 @@
+/* Native elements */
+
+html, body, #app, .wrapper{
+    height: 100%;
+}
+
 body{
+
+    margin: 0px;
+    padding: 0px;
+
     background-color: var(--color-surface-a0);
 }
 
+a {
+    display: inline-block;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all 0.3s ease-in-out;
+}
+
+a:hover {
+    background-color: rgba(0, 0, 255, 0.1);
+    color: blue;
+}
+
+
+/* Structure */
+
+.navbar{
+    padding: 0.8em;
+}
+
+main{
+    padding: 0.8em;
+}
+
+/* Grid System */
+
+[class^="col-"] {
+    flex: 1;
+    padding: 10px;
+}
+
+.col-1 { width: 8.33%; }
+.col-2 { width: 16.66%; }
+.col-3 { width: 25%; }
+.col-4 { width: 33.33%; }
+.col-5 { width: 41.66%; }
+.col-6 { width: 50%; }
+.col-7 { width: 58.33%; }
+.col-8 { width: 66.66%; }
+.col-9 { width: 75%; }
+.col-10 { width: 83.33%; }
+.col-11 { width: 91.66%; }
+.col-12 { width: 100%; }
+
+/* Helpers */
+
+/* Background color */
+
 .bg-primary{
     background-color: var(--primary-color);
+}
+
+/* Flex */
+
+.flex{
+    display: flex;
+}
+
+.flex-column{
+    flex-direction: column;
+}
+
+.flex-row{
+    flex-direction: row;
+}
+
+.flex-space-evently{
+    justify-content: space-evenly;
+}
+
+.flex-center{
+    justify-content: center;
+}
+
+/* Ombre */
+
+.shadow{
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.25), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Button */
+
+.btn {
+    background-color: var(--primary-color);
+    color: var(--text-color-inverse) !important;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: var(--primary-color-hover) !important;
+}
+
+.btn:active {
+    transform: scale(0.95);
 }

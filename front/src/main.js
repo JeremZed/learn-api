@@ -4,6 +4,7 @@ import router from './router'
 import { i18n, loadLocaleMessages } from "./locales";
 
 import "./assets/css/common.scss";
+import "./assets/css/responsive.scss";
 import "./assets/css/mode_dark.scss";
 import "./assets/css/mode_light.scss";
 

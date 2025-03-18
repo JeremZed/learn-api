@@ -8,12 +8,26 @@
   --color-surface-a40: #c5c5c5;
   --color-surface-a50: #b6b6b6;
 
-  --text-color-dark: #000000;
-  --text-color-light: #ffffff;
+  --text-color: #000000;
+  --text-color-inverse: #ffffff;
 
 
   body{
-    color : var(--text-color-dark);
+    color : var(--text-color);
+    background-color: var(--color-surface-a10);
+  }
+
+  .navbar{
+    background-color: var(--color-surface-a0);
+  }
+
+  a{
+    color: var(--text-color);
+  }
+
+  a:hover {
+    background-color: var(--color-surface-a20);
+    color: var(--text-color);
   }
 
 }

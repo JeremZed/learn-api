@@ -1,0 +1,11 @@
+
+/* Responsive */
+@media (max-width: 768px) {
+    [class^="col-"] {
+        width: 100%;
+    }
+
+    .flex {
+        flex-direction: column;
+    }
+}

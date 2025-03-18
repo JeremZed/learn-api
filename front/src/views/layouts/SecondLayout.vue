@@ -7,8 +7,6 @@ import Switcher from "@/components/Switcher.vue";
     <div class="app-container">
         <main class="content">
 
-            <div>Second Layout</div>
-
         <router-view />
         <Switcher />
         </main>
