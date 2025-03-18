@@ -75,7 +75,7 @@ import Switcher from "@/components/Switcher.vue";
         <br />
         <br />
 
-        <P>hELLO</P>
+        <p>hELLO</p>
 
         </main>
     </div>

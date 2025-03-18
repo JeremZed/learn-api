@@ -2,20 +2,20 @@
 import { defineProps, defineEmits } from "vue";
 
 const props = defineProps({
-  modelValue: Object, // État du formulaire
-  fields: Array, // Liste des champs
-  submitLabel: String, // Texte du bouton principal
-  buttons: Array, // Liste des boutons supplémentaires avec leur action
+  modelValue: Object,
+  fields: Array,
+  submitLabel: String,
+  buttons: Array,
 });
 const emit = defineEmits(["submit", "update:modelValue"]);
 
 const updateField = (field, value) => {
-  emit("update:modelValue", { ...props.modelValue, [field]: value });
+  props.modelValue[field] = value;
 };
 </script>
 
 <template>
-  <form @submit.prevent="emit('submit', modelValue)">
+  <form @submit.prevent="emit('submit', {...modelValue})">
     <div v-for="field in fields" :key="field.name">
       <label :for="field.name">{{ field.label }}</label>
 
@@ -26,7 +26,7 @@ const updateField = (field, value) => {
         :type="field.type"
         :placeholder="field.placeholder"
         :value="modelValue[field.name]"
-        @input="updateField(field.name, $event.target.value)"
+        @input="updateField(field.name, $event.target.value);"
       />
 
       <!-- Textarea -->
