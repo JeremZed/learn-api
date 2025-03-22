@@ -1,5 +1,26 @@
 {
     "welcome": "Bienvenue dans notre application !",
-    "theme": "Sélectionner un thème",
-    "language": "Choisir une langue"
+    "select_theme": "Sélectionner un thème",
+    "select_language": "Choisir une langue",
+    "select_layout": "Choisir un layout",
+    "select_mode": "Choisir un mode",
+    "connexion": "Connexion",
+    "signin" : "Se connecter",
+    "email" : "E-mail",
+    "password" : "Mot de passe",
+    "email_placeholder" : "Entrez votre e-mail",
+    "password_placeholder" : "Entrez votre mot de passe",
+    "wrong_credential" : "Identifiants incorrect",
+    "nav_home" : "Accueil",
+    "nav_about" : "A Propos",
+    "nav_service" : "Services",
+    "nav_contact" : "Contact",
+    "seo_title_login" : "Page de connexion",
+    "seo_meta_description_login" : "Page de connexion à l'application.",
+    "language_fr" : "Français",
+    "language_en" : "English",
+    "layout_default" : "Default",
+    "layout_pink" : "Pink",
+    "mode_dark" : "Sombre",
+    "mode_light" : "Clair"
 }

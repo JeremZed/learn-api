@@ -6,6 +6,9 @@ const props = defineProps({
   fields: Array,
   submitLabel: String,
   buttons: Array,
+  className: String,
+  id: String,
+  errorMessage: [String, Object]
 });
 const emit = defineEmits(["submit", "update:modelValue"]);
 
@@ -15,8 +18,8 @@ const updateField = (field, value) => {
 </script>
 
 <template>
-  <form @submit.prevent="emit('submit', {...modelValue})">
-    <div v-for="field in fields" :key="field.name">
+  <form @submit.prevent="emit('submit', {...modelValue})" :class="['form', className]" :id="id" >
+    <div v-for="field in fields" :key="field.name" class="form-group">
       <label :for="field.name">{{ field.label }}</label>
 
       <!-- Champ texte / email / password -->
@@ -63,17 +66,24 @@ const updateField = (field, value) => {
       </div>
     </div>
 
-    <!-- Bouton de soumission -->
-    <button type="submit">{{ submitLabel }}</button>
+    <div class="form-group" v-if="errorMessage">
+      <div class="alert error">
+        {{ $t(errorMessage.flag) }}
+      </div>
+    </div>
 
-    <!-- Boutons supplémentaires -->
-    <button
-      v-for="btn in buttons"
-      :key="btn.label"
-      type="button"
-      @click="btn.action(modelValue)"
-    >
-      {{ btn.label }}
-    </button>
+    <div class="form-group">
+      <button type="submit">{{ submitLabel }}</button>
+
+      <!-- Boutons supplémentaires -->
+      <button
+        v-for="btn in buttons"
+        :key="btn.label"
+        type="button"
+        @click="btn.action(modelValue)"
+      >
+        {{ btn.label }}
+      </button>
+    </div>
   </form>
 </template>

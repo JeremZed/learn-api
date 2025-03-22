@@ -1,10 +1,24 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, computed } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
+import { useHead } from "@vueuse/head";
 import { authService } from "@/services/authService.js";
 import BaseForm from "@/components/forms/BaseForm.vue";
 
+const { t } = useI18n();
 const router = useRouter();
+
+// Modification du title de la page
+useHead({
+  title: computed(() => t("seo_title_login")),
+  meta: [
+    {
+      name: "description",
+      content: computed(() => t("seo_meta_description_login"))
+    }
+  ]
+});
 
 const form = reactive({
   email: "",
@@ -13,10 +27,10 @@ const form = reactive({
 
 const errorMessage = ref("");
 
-const fields = [
-  { name: "email", label: "Email", type: "email", placeholder: "Entrez votre email" },
-  { name: "password", label: "Mot de passe", type: "password", placeholder: "Mot de passe" }
-];
+const fields = computed(() =>  [
+  { name: "email", label: t('email'), type: "email", placeholder: t('email_placeholder') },
+  { name: "password", label: t('password'), type: "password", placeholder: t('password_placeholder') }
+]);
 
 const handleSubmit = async (formData) => {
   try {
@@ -31,9 +45,16 @@ const handleSubmit = async (formData) => {
 
 <template>
   <div class="login-container">
-    <h2>Connexion</h2>
-    <BaseForm v-model="form" :fields="fields" submitLabel="Se connecter" @submit="handleSubmit" />
-    <p v-if="errorMessage">{{ errorMessage }}</p>
+    <h1>{{ $t("connexion") }}</h1>
+    <BaseForm
+    v-model="form"
+    :fields="fields"
+    :submitLabel="$t('signin')"
+    @submit="handleSubmit"
+    className="form-login shadow"
+    :errorMessage="errorMessage"
+     />
+
   </div>
 </template>
 

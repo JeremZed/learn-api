@@ -8,11 +8,11 @@ const changeMode = (event) => {
 </script>
 
 <template>
-  <div class="mode-switcher">
-    <label for="mode-select">Choisir un mode :</label>
+  <div class="form-group">
+    <label for="mode-select">{{ $t('select_mode') }}</label>
     <select id="mode-select" @change="changeMode" :value="store.switcher.mode">
-      <option :value=MODES.LIGHT>Clair</option>
-      <option :value=MODES.DARK>Sombre</option>
+      <option :value=MODES.LIGHT>{{ $t('mode_light') }}</option>
+      <option :value=MODES.DARK>{{ $t('mode_dark') }}</option>
     </select>
   </div>
 </template>

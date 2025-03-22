@@ -3,6 +3,8 @@
 
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   import { faCoffee } from '@fortawesome/free-solid-svg-icons';
+
+
 </script>
 
 <template>

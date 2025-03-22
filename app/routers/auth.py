@@ -26,7 +26,10 @@ async def login(
 
     if existing_user is None:
         message = get_message(request, "wrong_credential")
-        raise HTTPException(status_code=400, detail={"message" : message})
+        raise HTTPException(status_code=400, detail={
+            "flag" : "wrong_credential",
+            "message" : message
+            })
 
     password_valid = verify_password(form.password, existing_user.password)
 

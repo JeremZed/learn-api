@@ -17,4 +17,7 @@ export const authService = {
       throw error.response?.data?.detail || "Inscription échouée.";
     }
   },
+  isAuthenticated() {
+    return !!localStorage.getItem("token");
+  }
 };

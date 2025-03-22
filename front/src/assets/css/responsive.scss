@@ -8,4 +8,36 @@
     .flex {
         flex-direction: column;
     }
+
+    .form {
+        max-width: 100%;
+        padding: 15px;
+    }
+
+    .form-login{
+        width: auto;
+    }
+
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.75rem; }
+    h3 { font-size: 1.5rem; }
+    h4 { font-size: 1.25rem; }
+    h5 { font-size: 1.1rem; }
+    h6 { font-size: 1rem; }
+
+    .show-navbar-mobile{
+        display: flex !important;
+        justify-content: center;
+    }
+
+    .navbar > .flex{
+        height: 0px;
+        overflow: hidden;
+    }
+    .navbar > .flex.open{
+        flex-direction: column;
+        height: auto;
+        overflow-y: auto;
+
+    }
 }

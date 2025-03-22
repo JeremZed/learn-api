@@ -8,11 +8,11 @@ const changeLayout = (event) => {
 </script>
 
 <template>
-  <div class="layout-switcher">
-    <label for="layout-select">Choisir un layout :</label>
+  <div class="form-group">
+    <label for="layout-select">{{ $t('select_layout') }}</label>
     <select id="layout-select" @change="changeLayout" :value="store.switcher.layout">
-      <option :value=LAYOUTS.DEFAULT >Default</option>
-      <option :value=LAYOUTS.SECOND >Second</option>
+      <option :value=LAYOUTS.DEFAULT >{{ $t('layout_default') }}</option>
+      <option :value=LAYOUTS.SECOND >{{ $t('layout_pink') }}</option>
     </select>
   </div>
 </template>

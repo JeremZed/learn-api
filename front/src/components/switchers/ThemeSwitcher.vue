@@ -8,8 +8,8 @@ const changeTheme = (event) => {
 </script>
 
 <template>
-  <div class="theme-switcher">
-    <label for="theme-select">Choisir un thème :</label>
+  <div class="form-group">
+    <label for="theme-select">{{ $t('select_theme') }}</label>
     <select id="theme-select" @change="changeTheme" :value="store.switcher.theme">
       <option :value=THEMES.DEFAULT>Défaut</option>
       <option :value=THEMES.PINK>Pink</option>
