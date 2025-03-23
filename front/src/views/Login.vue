@@ -5,6 +5,7 @@ import { useI18n } from "vue-i18n";
 import { useHead } from "@vueuse/head";
 import { authService } from "@/services/authService.js";
 import BaseForm from "@/components/forms/BaseForm.vue";
+import store from "@/stores/index.js";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -34,8 +35,14 @@ const fields = computed(() =>  [
 
 const handleSubmit = async (formData) => {
   try {
-    await authService.login(formData.email, formData.password);
-    router.push("/");
+    await authService.login(formData.email, formData.password).then((response) => {
+
+      if( typeof response?.data?.token != "undefined"){
+        store.user.setUser(response.data.user, response.data.token);
+        router.push("/");
+      }
+    })
+
   } catch (error) {
     errorMessage.value = error;
   }

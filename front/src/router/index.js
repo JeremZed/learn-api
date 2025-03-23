@@ -1,10 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { authService } from '@/services/authService.js'
+import store from "@/stores/index.js";
 
 
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 import Login from "../views/Login.vue";
+
+import Admin from "../views/admin/Admin.vue"
 
 const routes = [
   {
@@ -23,6 +26,11 @@ const routes = [
     name : 'login',
     component: Login
   },
+  { path: "/admin",
+    name : 'admin',
+    component: Admin,
+    meta: { auth: true, is_admin: true }
+  },
 ]
 
 const router = createRouter({
@@ -33,7 +41,11 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.meta.auth && !authService.isAuthenticated()) {
     next("/login");
-  } else {
+  }
+  else if (to.meta.is_admin && !store.user.isAdmin()) {
+    next("/");
+  }
+  else {
     next();
   }
 });

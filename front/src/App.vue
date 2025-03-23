@@ -6,7 +6,7 @@ import SecondLayout from "@/views/layouts/SecondLayout.vue";
 
 import { LAYOUTS } from "@/constants.js";
 
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import store from "@/stores/index.js";
 
 const layoutComponent = computed(() => {
@@ -23,6 +23,10 @@ const layoutComponent = computed(() => {
     l = DefaultLayout
   }
   return l;
+});
+
+onMounted(async () => {
+  await store.user.init();
 });
 
 </script>

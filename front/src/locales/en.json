@@ -22,5 +22,9 @@
     "layout_default" : "Default",
     "layout_pink" : "Pink",
     "mode_dark" : "Dark",
-    "mode_light" : "Light"
+    "mode_light" : "Light",
+    "profile" : "My profil",
+    "settings" : "Settings",
+    "admin_panel" : "Administration",
+    "logout" : "Logout"
 }

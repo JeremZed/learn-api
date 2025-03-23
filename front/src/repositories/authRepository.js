@@ -10,4 +10,7 @@ export const authRepository = {
   logout() {
     return api.post("/auth/logout");
   },
+  getCurrentUser() {
+    return api.get("/auth/me");
+  }
 };

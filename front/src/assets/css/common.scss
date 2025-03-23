@@ -367,3 +367,58 @@ h6 {
         display: none;
     }
 }
+
+/* Menu Utilisateur navbar */
+.user-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: var(--color-surface-a10);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.user-avatar:hover {
+    background-color: var(--color-surface-a40);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background-color: var(--color-surface-a0);
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 180px;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.dropdown-menu a {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.dropdown-menu a:hover {
+    background-color: var(--color-surface-a20);
+}
+
+.dropdown-menu hr {
+    border: none;
+    height: 1px;
+    background-color: var(--color-surface-a20);
+    margin: 5px 0;
+}

@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from dependencies import get_settings
 from core.models import User, ROLE_USER
 from core.forms.front import FormRegister, FormLogin, FormQueryResetPassword, FormResetPassword
-from dependencies import get_db, get_token_access, get_token_password
+from dependencies import get_db, get_token_access, get_token_password, get_current_user
 from core.tools import clean_item, hash_password, verify_password, get_message
 import time
 from bson import ObjectId
@@ -43,7 +43,14 @@ async def login(
 
     return JSONResponse(
         status_code=200,
-        content={"message" : message, "data" : {"token": access_token, "token_type": "Bearer"}}
+        content={
+            "message" : message,
+            "data" : {
+                "token": access_token,
+                "token_type": "Bearer",
+                "user" : existing_user.model_dump(include=['role', 'name'])
+            }
+        }
     )
 
 @router.post("/register", name="auth.register")
@@ -154,3 +161,21 @@ async def reset_password(
     message = get_message(request, "reset_password_successfully", email=form.email)
 
     return JSONResponse(status_code=200, content={"message" : message})
+
+@router.get("/me", name="auth.me")
+async def who_me(
+        request: Request,
+        user= Depends(get_current_user),
+    ) -> JSONResponse:
+
+    """
+        Route qui permet de retourner les informations de l'utilisateur actuellement connecté via son token
+    """
+
+    return JSONResponse(status_code=200, content={
+        "message" : "OK",
+        "data" : {
+            "user" : user.model_dump(include=['role', 'name'])
+        }
+    })
+
