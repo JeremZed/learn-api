@@ -53,40 +53,40 @@ async def login(
         }
     )
 
-@router.post("/register", name="auth.register")
-async def create_user(
-    request: Request,
-    form: FormRegister,
-    db=Depends(get_db)
-    ) -> JSONResponse:
+# @router.post("/register", name="auth.register")
+# async def create_user(
+#     request: Request,
+#     form: FormRegister,
+#     db=Depends(get_db)
+#     ) -> JSONResponse:
 
-    """
-        Route pour créer un compte
-    """
+#     """
+#         Route pour créer un compte
+#     """
 
-    repo = UserRepository(db)
+#     repo = UserRepository(db)
 
-    # Vérification si l'utilisateur existe déjà par son email
-    existing_user = await repo.check_email_exists(form.email)
+#     # Vérification si l'utilisateur existe déjà par son email
+#     existing_user = await repo.check_email_exists(form.email)
 
-    if existing_user:
-        message = get_message(request, "email_already_registered")
-        raise HTTPException(status_code=400, detail=message)
+#     if existing_user:
+#         message = get_message(request, "email_already_registered")
+#         raise HTTPException(status_code=400, detail=message)
 
-    # Insertion du nouvel utilisateur
-    new_user = User(
-        username=form.username,
-        name=form.name,
-        email=form.email,
-        role= ROLE_USER,
-        password=hash_password(form.password)
-    )
+#     # Insertion du nouvel utilisateur
+#     new_user = User(
+#         username=form.username,
+#         name=form.name,
+#         email=form.email,
+#         role= ROLE_USER,
+#         password=hash_password(form.password)
+#     )
 
-    result = await repo.create(new_user.model_dump(exclude=['id']))
+#     result = await repo.create(new_user.model_dump(exclude=['id']))
 
-    message = get_message(request, "user_created_successfully", username=new_user.username)
+#     message = get_message(request, "user_created_successfully", username=new_user.username)
 
-    return JSONResponse(status_code=201, content={"message": message})
+#     return JSONResponse(status_code=201, content={"message": message})
 
 
 @router.post("/query-reset-password", name="auth.query_reset_password")

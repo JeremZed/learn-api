@@ -13,7 +13,7 @@ const isOpen = ref(false)
 </script>
 
 <template>
-    <div :class="['switchers', {open:isOpen}]">
+    <div :class="['switchers', {open:isOpen, shadow:isOpen}]">
         <div class="toggle-btn" @click="isOpen = !isOpen">
             <font-awesome-icon v-if="isOpen" :icon="faXmark" />
             <font-awesome-icon v-else :icon="faGear" />

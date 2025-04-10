@@ -47,14 +47,14 @@ onUnmounted(() => {
         <nav class="navbar shadow">
             <div :class="['flex', {open:isOpen}]">
                 <div class="flex col-8 flex-space-evently">
-                    <a href="#" class="">{{ $t("nav_home") }}</a>
-                    <a href="#" class="">{{ $t("nav_about") }}</a>
-                    <a href="#" class="">{{ $t("nav_service") }}</a>
-                    <a href="#" class="">{{ $t("nav_contact") }}</a>
+                    <router-link to="/">{{ $t("nav_home") }}</router-link>
+                    <router-link to="/about">{{ $t("nav_about") }}</router-link>
+                    <router-link to="/services">{{ $t("nav_service") }}</router-link>
+                    <router-link to="/contact">{{ $t("nav_contact") }}</router-link>
                 </div>
 
                 <div v-if="!store.user.isAuthenticated" class="flex flex-center col-4">
-                    <a href="" class="btn">{{ $t("signin") }}</a>
+                    <router-link to="/login" class="btn">{{ $t("signin") }}</router-link>
                 </div>
                 <div v-else ref="userMenuRef" class="user-menu">
                     <div class="user-avatar" @click="toggleMenu">
@@ -62,11 +62,8 @@ onUnmounted(() => {
                     </div>
 
                     <div v-if="isMenuOpen" class="dropdown-menu">
-                        <router-link to="/about" @click="closeMenu">
+                        <router-link to="/profil" @click="closeMenu">
                             <font-awesome-icon :icon="faUser" /> {{ $t("profile") }}
-                        </router-link>
-                        <router-link to="/about" @click="closeMenu">
-                            <font-awesome-icon :icon="faCog" /> {{ $t("settings") }}
                         </router-link>
                         <router-link v-if="isAdmin" to="/admin" @click="closeMenu">
                             <font-awesome-icon :icon="faUserShield" /> {{ $t("admin_panel") }}

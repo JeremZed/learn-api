@@ -1,6 +1,7 @@
 export const LAYOUTS = {
     DEFAULT: "default",
-    SECOND: "second"
+    SECOND: "second",
+    DASHBOARD : "dashboard"
   };
 
 export const THEMES = {

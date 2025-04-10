@@ -3,6 +3,7 @@
 
 import DefaultLayout from "@/views/layouts/DefaultLayout.vue";
 import SecondLayout from "@/views/layouts/SecondLayout.vue";
+import DashboardLayout from "@/views/layouts/DashboardLayout.vue";
 
 import { LAYOUTS } from "@/constants.js";
 
@@ -19,8 +20,11 @@ const layoutComponent = computed(() => {
     case LAYOUTS.SECOND:
       l = SecondLayout
       break
+    case LAYOUTS.DASHBOARD:
+      l = DashboardLayout
+      break
     default:
-    l = DefaultLayout
+    l = DashboardLayout
   }
   return l;
 });

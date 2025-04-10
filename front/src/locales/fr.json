@@ -7,9 +7,11 @@
     "connexion": "Connexion",
     "signin" : "Se connecter",
     "email" : "E-mail",
+    "username" : "Pseudo",
     "password" : "Mot de passe",
     "email_placeholder" : "Entrez votre e-mail",
     "password_placeholder" : "Entrez votre mot de passe",
+    "username_placeholder" : "Entrez votre pseudo",
     "wrong_credential" : "Identifiants incorrect",
     "nav_home" : "Accueil",
     "nav_about" : "A Propos",
@@ -26,6 +28,19 @@
     "profile" : "Mon profile",
     "settings" : "Paramètres",
     "admin_panel" : "Administration",
-    "logout" : "Se déconnecter"
+    "logout" : "Se déconnecter",
+    "register" : "Créer un compte",
+    "page_services_title" : "Services",
+    "page_contact_title" : "Contact",
+    "page_profil_title" : "Mon profil",
+    "submit" : "Soumettre",
+    "send" : "Envoyer",
+    "save" : "Enregister",
+    "not_account_?" : "Pas encore de compte ?",
+    "already_account_?" : "Déjà un compte ?",
+    "form_value_error" : "Le formulaire comporte des erreurs",
+    "signup_success" : "Inscription réussie!",
+    "seo_meta_description_register" : "Page d'inscription",
+    "seo_title_register" : "Page d'inscription"
 
 }

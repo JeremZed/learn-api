@@ -5,6 +5,8 @@
   --font-primary: 'Arial', sans-serif;
   --font-secondary: 'Georgia', serif;
 
+  --error: #dc3545;
+
   --alert-bg-error : #f8d7da;
   --alert-text-error : #721c24;
   --alert-border-left-error : #dc3545;
@@ -28,4 +30,10 @@
   --primary-color-hover : #0b7e5b;
   --secondary-color : #12a0c4;
   --tertiary-color: #1247c4;
+
+  --notification-bg-success : #4caf50;
+  --notification-bg-error : #f44336;
+  --notification-bg-warning : #ff9800;
+  --notification-bg-info : #2196f3;
+
 }

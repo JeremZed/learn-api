@@ -1,10 +1,11 @@
 import { reactive } from "vue";
+import { LAYOUTS } from "@/constants.js";
 
 export const switcherStore = reactive({
 
   theme: localStorage.getItem("theme") || "default",
   mode: localStorage.getItem("mode") || "light",
-  layout : localStorage.getItem("layout") || "default",
+  layout : localStorage.getItem("layout") || LAYOUTS.DashboardLayout,
 
   setTheme(newTheme) {
     this.theme = newTheme;

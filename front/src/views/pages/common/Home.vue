@@ -8,7 +8,7 @@
 </script>
 
 <template>
-    <div class="home">
+    <div class="p-home">
       <h1>{{ $t("welcome") }} <font-awesome-icon :icon="faCoffee" /> </h1>
 
     </div>

@@ -6,6 +6,7 @@ import { useHead } from "@vueuse/head";
 import { authService } from "@/services/authService.js";
 import BaseForm from "@/components/forms/BaseForm.vue";
 import store from "@/stores/index.js";
+import { LAYOUTS } from "@/constants.js";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -39,6 +40,7 @@ const handleSubmit = async (formData) => {
 
       if( typeof response?.data?.token != "undefined"){
         store.user.setUser(response.data.user, response.data.token);
+        store.switcher.setLayout(LAYOUTS.DASHBOARD);
         router.push("/");
       }
     })
@@ -51,16 +53,17 @@ const handleSubmit = async (formData) => {
 </script>
 
 <template>
-  <div class="login-container">
+  <div class="p-login">
     <h1>{{ $t("connexion") }}</h1>
     <BaseForm
     v-model="form"
     :fields="fields"
     :submitLabel="$t('signin')"
     @submit="handleSubmit"
-    className="form-login shadow"
+    className="form-small shadow"
     :errorMessage="errorMessage"
      />
+     <div class="align-center"><router-link to="/register">{{ $t('not_account_?') }}</router-link></div>
 
   </div>
 </template>

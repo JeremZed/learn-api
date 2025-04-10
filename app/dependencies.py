@@ -8,10 +8,8 @@ from fastapi import HTTPException, Security, Depends, Request
 from fastapi.security import OAuth2PasswordBearer
 from core.config import get_settings
 from core.tools import hash_password
-from core.models import UserCurrent, ROLE_NONE, ROLE_ADMIN
 from pymongo.collection import Collection
 from core.database import database
-from bson import ObjectId
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -77,39 +75,41 @@ async def get_current_user(
         Permet de retourner l'utilisateur derrière le token
     """
 
-    if not token:
-        raise HTTPException(status_code=401, detail="Missing authentication token")
+    # if not token:
+    #     raise HTTPException(status_code=401, detail="Missing authentication token")
 
-    payload = verify_token(token)
-    user_id: str = payload.get("id")
+    # payload = verify_token(token)
+    # user_id: str = payload.get("id")
 
-    if user_id is None:
-        raise HTTPException(status_code=401, detail="Token is invalid")
+    # if user_id is None:
+    #     raise HTTPException(status_code=401, detail="Token is invalid")
 
-    collection = db.get_collection("users")
-    existing_user = await collection.find_one({"_id": ObjectId(user_id)})
+    # collection = db.get_collection("users")
+    # existing_user = await collection.find_one({"_id": ObjectId(user_id)})
 
-    user = UserCurrent(
-        username=existing_user['username'],
-        email=existing_user['email'],
-        name=existing_user['name'],
-        role=existing_user.get('role', ROLE_NONE),
-    )
+    # user = UserCurrent(
+    #     username=existing_user['username'],
+    #     email=existing_user['email'],
+    #     name=existing_user['name'],
+    #     role=existing_user.get('role', ROLE_NONE),
+    # )
 
-    request.state.current_user = user
-    return user
+    # request.state.current_user = user
+    # return user
+    return False
 
 async def check_is_admin(request: Request):
     """
         Permet de checker si l'utilisateur en cours est un admin
     """
 
-    current_user = getattr(request.state, "current_user", None)
+    # current_user = getattr(request.state, "current_user", None)
 
-    if isinstance(current_user, UserCurrent) == False:
-        raise HTTPException(status_code=403, detail="Forbidden")
+    # if isinstance(current_user, UserCurrent) == False:
+    #     raise HTTPException(status_code=403, detail="Forbidden")
 
-    if current_user.is_admin() == False:
-        raise HTTPException(status_code=403, detail="Forbidden")
+    # if current_user.is_admin() == False:
+    #     raise HTTPException(status_code=403, detail="Forbidden")
 
-    return True
+    # return True
+    return False

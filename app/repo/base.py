@@ -24,3 +24,6 @@ class BaseRepository:
         )
     async def hard_delete(self, id: str):
         return await self.collection.delete_one({"_id": ObjectId(id)})
+
+    async def check_exists(self, where: dict):
+        return await self.collection.find_one(where)

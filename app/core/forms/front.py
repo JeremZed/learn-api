@@ -8,7 +8,6 @@ class FormRegister(BaseModel):
     username: str
     email: str
     password: str
-    name: str
 
 class FormLogin(BaseModel):
     """
