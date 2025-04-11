@@ -38,12 +38,25 @@
     "save" : "Enregister",
     "not_account_?" : "Pas encore de compte ?",
     "already_account_?" : "Déjà un compte ?",
+    "forget_password_?" : "Mot de passe oublié ?",
     "form_value_error" : "Le formulaire comporte des erreurs",
     "signup_success" : "Inscription réussie!",
     "login_success" : "Identification réussie!",
     "seo_meta_description_register" : "Page d'inscription",
     "seo_title_register" : "Page d'inscription",
     "seo_title_dashboard" : "Dashboard",
-    "seo_meta_description_dashboard" : "Dashboard Page"
+    "seo_meta_description_dashboard" : "Dashboard Page",
+    "seo_title_forget_password":"Forget Password",
+    "seo_meta_description_forget_password":"Forget Password Page",
+    "query_send_success" : "Demande de récupération de mot de passe envoyée à l'adresse mail indiquée.",
+    "forget_password" : "Mot de passe oublié",
+    "query_reset_password_not_found" : "Demande introuvable",
+    "query_reset_password_expired" : "Demande expirée",
+    "reset_password_successfully" : "Réinitialisation de mot de passe réussie",
+    "seo_title_reset_password" : "Réinitialisation de mot de passe",
+    "seo_meta_description_reset_password" : "Réinitialisation de mot de passe page",
+    "new_password" : "Nouveau mot de passe",
+    "token_placeholder" : "Token",
+    "token" : "Token"
 
 }

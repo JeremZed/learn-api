@@ -55,7 +55,7 @@ const submitDone = (result) => { console.log(result) }
     :submitHandler="handleSubmit"
     className="form-small shadow"
      />
-     <div class="align-center"><router-link to="/login">{{ $t('already_account_?') }}</router-link></div>
+     <div class="align-center"><router-link :to="{name : 'login'}">{{ $t('already_account_?') }}</router-link></div>
   </div>
 </template>
 

@@ -19,6 +19,22 @@ export const authService = {
       throw error.response?.data || "Inscription échouée.";
     }
   },
+  async sendResetPassword(userData) {
+    try {
+      const response = await authRepository.resetPassword(userData);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || "Réinitialisation de mot de passe échouée.";
+    }
+  },
+  async sendQueryForgetPassword(email) {
+    try {
+      const response = await authRepository.queryForgetPassword(email);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || "Demande échouée.";
+    }
+  },
   async fetchCurrentUser() {
     try {
       const response = await authRepository.getCurrentUser();

@@ -10,7 +10,7 @@ def get_msg_errors_validation(exc: ValidationError) -> list:
     """
     errors = []
     for e in exc.errors():
-        print(e['ctx'])
+        print(e)
         errors.append({
             "field": e['loc'][0],
             "msg": str(e['ctx'].get('error', 'Erreur de validation inconnue'))

@@ -36,7 +36,9 @@ const layoutComponent = computed(() => {
 onMounted(async () => {
   await store.user.init()
   .then(() => { router.push("/"); })
-  .catch( () => { router.push('/login') });
+  .catch( () => {
+    // router.push('/login')
+  });
 });
 
 </script>

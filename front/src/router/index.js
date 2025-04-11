@@ -7,6 +7,8 @@ import Home from '../views/pages/common/Home.vue'
 import About from '../views/pages/common/About.vue'
 import Login from "../views/pages/common/Login.vue";
 import Register from "../views/pages/common/Register.vue";
+import PasswordForget from "../views/pages/common/ForgetPassword.vue";
+import resetPassword from "../views/pages/common/ResetPassword.vue";
 
 import Admin from "../views/admin/Admin.vue"
 import Profil from '../views/pages/dashboard/Profil.vue';
@@ -31,6 +33,14 @@ const routes = [
   { path: "/register",
     name : 'register',
     component: Register
+  },
+  { path: "/forget-password",
+    name : 'forget-password',
+    component: PasswordForget
+  },
+  { path: "/reset-password",
+    name : 'reset-password',
+    component: resetPassword
   },
   { path: "/admin",
     name : 'admin',

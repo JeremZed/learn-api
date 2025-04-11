@@ -36,6 +36,7 @@
     "send" : "Send",
     "save" : "Save",
     "not_account_?" : "Not account ?",
+    "forget_password_?" : "Password forget ?",
     "already_account_?" : "Already account ?",
     "form_value_error" : "The form contains errors",
     "signup_success" : "Sign up done",
@@ -43,5 +44,17 @@
     "seo_meta_description_register" : "Sign up Page",
     "seo_title_register" : "Sign up Page",
     "seo_title_dashboard" : "Dashboard",
-    "seo_meta_description_dashboard" : "Dashboard Page"
+    "seo_meta_description_dashboard" : "Dashboard Page",
+    "seo_title_forget_password":"forgotten password",
+    "seo_meta_description_forget_password":"forgotten password",
+    "query_send_success" : "Password recovery request sent to the email address provided.",
+    "forget_password" : "forgotten password",
+    "query_reset_password_not_found" : "Request not found",
+    "query_reset_password_expired" : "Request expired",
+    "reset_password_successfully" : "Password reset successful",
+    "seo_title_reset_password" : "Password reset",
+    "seo_meta_description_reset_password" : "Password reset page",
+    "new_password" : "New password",
+    "token_placeholder" : "Token",
+    "token" : "Token"
 }
