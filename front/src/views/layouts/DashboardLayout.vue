@@ -4,6 +4,7 @@ import { computed } from "vue";
 import store from "@/stores/index.js";
 import TopBar from "@/components/TopBar.vue";
 import LeftBar from "@/components/LeftBar.vue";
+import NotificationContainer from '@/components/notification/NotificationContainer.vue';
 
 const isAdmin = computed(() => store.user.isAdmin());
 const isLogged = computed(() => store.user.user != null);
@@ -26,57 +27,9 @@ const logout = () => {
             <main class="content"></main>
 
         <router-view />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <p>Bouuuu</p>
+        <NotificationContainer />
 
         </div>
     </div>
+
 </template>

@@ -1,32 +1,21 @@
 <script setup>
 import { ref } from 'vue';
+import store from "@/stores/index.js";
 import Notification from './Notification.vue';
 
-const notifications = ref([]);
-
-let counter = 0;
-
-function showNotification(message, type = 'info', duration = 10000) {
-  const id = counter++;
-  notifications.value.push({ id, message, type, duration });
-}
-
-function closeNotification(id) {
-  notifications.value = notifications.value.filter(n => n.id !== id);
-}
-
-defineExpose({ showNotification });
+const closeNotification = (id) => {
+  store.notification.removeNotification(id);
+};
 </script>
 
 <template>
   <div class="notification-container">
     <Notification
-      v-for="n in notifications"
+      v-for="n in store.notification.notifications"
       :key="n.id"
       :id="n.id"
       :message="n.message"
       :type="n.type"
-      :duration="n.duration"
       @close="closeNotification"
     />
   </div>

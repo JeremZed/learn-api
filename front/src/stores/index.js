@@ -1,7 +1,9 @@
 import { userStore } from "./userStore";
 import { switcherStore } from "./switcherStore";
+import { notificationStore } from "./notificationStore";
 
 export default {
     user: userStore,
-    switcher : switcherStore
+    switcher : switcherStore,
+    notification : notificationStore
 };

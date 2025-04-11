@@ -22,19 +22,12 @@ export const authService = {
   async fetchCurrentUser() {
     try {
       const response = await authRepository.getCurrentUser();
-      store.user.setUser(response.data.data.user, localStorage.getItem("token"));
+      store.user.setUser(response.data.data.user);
       store.switcher.setLayout(LAYOUTS.DASHBOARD);
       return response.data;
     } catch (error) {
       store.user.logout();
       throw "Impossible de récupérer l'utilisateur.";
     }
-  },
-  isAuthenticated() {
-    return localStorage.getItem("token") !== null;
-  },
-  async logout(){
-    localStorage.removeItem('token')
-    return true
   }
 };

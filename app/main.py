@@ -34,7 +34,7 @@ app.add_exception_handler(ValidationError, model_validation_exception_handler)
 # Autoriser le frontend Vue.js à appeler l'API
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

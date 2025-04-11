@@ -5,14 +5,7 @@ import { faCheckCircle, faExclamationCircle, faExclamationTriangle, faInfoCircle
 
 const props = defineProps({
   message: String,
-  type: {
-    type: String,
-    default: 'info'
-  },
-  duration: {
-    type: Number,
-    default: 5000 // en ms
-  },
+  type: String,
   id: Number
 });
 
@@ -25,14 +18,9 @@ const icons = {
   info: faInfoCircle
 };
 
-onMounted(() => {
-    if(props.duration > 0){
-        setTimeout(() => emit('close', props.id), props.duration);
-    }
-});
-const close = () => {
+function close() {
   emit('close', props.id);
-};
+}
 </script>
 
 <template>

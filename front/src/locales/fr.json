@@ -40,7 +40,10 @@
     "already_account_?" : "Déjà un compte ?",
     "form_value_error" : "Le formulaire comporte des erreurs",
     "signup_success" : "Inscription réussie!",
+    "login_success" : "Identification réussie!",
     "seo_meta_description_register" : "Page d'inscription",
-    "seo_title_register" : "Page d'inscription"
+    "seo_title_register" : "Page d'inscription",
+    "seo_title_dashboard" : "Dashboard",
+    "seo_meta_description_dashboard" : "Dashboard Page"
 
 }

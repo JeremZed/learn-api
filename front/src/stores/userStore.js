@@ -3,21 +3,19 @@ import { authService } from "@/services/authService.js";
 
 export const userStore = reactive({
   user: null,
-  token: localStorage.getItem("token") || null,
-  isAuthenticated: !!localStorage.getItem("token"),
+  isAuthenticated: false,
+  loading: true,
 
-  setUser(userData, token) {
+  setUser(userData) {
     this.isAuthenticated = true;
     this.user = userData;
-    this.token = token;
-    localStorage.setItem("token", token);
+    this.loading = false;
   },
 
   logout() {
     this.isAuthenticated = false;
     this.user = null;
-    this.token = null;
-    localStorage.removeItem("token");
+    this.loading = true;
   },
 
   isAdmin(){
@@ -25,12 +23,14 @@ export const userStore = reactive({
   },
 
   async init() {
-    if (this.token) {
-      try {
-        await authService.fetchCurrentUser();
-      } catch (error) {
-        console.error("Erreur lors de la récupération de l'utilisateur :", error);
-      }
+    try {
+        const response = await authService.fetchCurrentUser();
+        if (response?.data?.user) {
+          this.setUser(response.data.user);
+        }
+
+    } catch (error) {
+      throw new Error("Erreur lors de la récupération de l'utilisateur :", error);
     }
   }
 });

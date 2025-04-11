@@ -13,45 +13,45 @@ from routers.base_router import create_crud_routes
 
 router = APIRouter(prefix=f"/auth", tags=["auth"])
 
-@router.post("/login", name="auth.login")
-async def login(
-    request: Request,
-    form : FormLogin,
-    db=Depends(get_db),
-    settings=Depends(get_settings)
-    ):
+# @router.post("/login", name="auth.login")
+# async def login(
+#     request: Request,
+#     form : FormLogin,
+#     db=Depends(get_db),
+#     settings=Depends(get_settings)
+#     ):
 
-    repo = UserRepository(db)
-    existing_user =  clean_item(await repo.check_email_exists(form.email), model=User)
+#     repo = UserRepository(db)
+#     existing_user =  clean_item(await repo.check_email_exists(form.email), model=User)
 
-    if existing_user is None:
-        message = get_message(request, "wrong_credential")
-        raise HTTPException(status_code=400, detail={
-            "flag" : "wrong_credential",
-            "message" : message
-            })
+#     if existing_user is None:
+#         message = get_message(request, "wrong_credential")
+#         raise HTTPException(status_code=400, detail={
+#             "flag" : "wrong_credential",
+#             "message" : message
+#             })
 
-    password_valid = verify_password(form.password, existing_user.password)
+#     password_valid = verify_password(form.password, existing_user.password)
 
-    if not password_valid:
-        message = get_message(request, "wrong_credential")
-        raise HTTPException(status_code=400, detail={"message" : message})
+#     if not password_valid:
+#         message = get_message(request, "wrong_credential")
+#         raise HTTPException(status_code=400, detail={"message" : message})
 
-    access_token = get_token_access(data={'id' : existing_user.id }, settings=settings)
+#     access_token = get_token_access(data={'id' : existing_user.id }, settings=settings)
 
-    message = get_message(request, "user_logged_successfully")
+#     message = get_message(request, "user_logged_successfully")
 
-    return JSONResponse(
-        status_code=200,
-        content={
-            "message" : message,
-            "data" : {
-                "token": access_token,
-                "token_type": "Bearer",
-                "user" : existing_user.model_dump(include=['role', 'name'])
-            }
-        }
-    )
+#     return JSONResponse(
+#         status_code=200,
+#         content={
+#             "message" : message,
+#             "data" : {
+#                 "token": access_token,
+#                 "token_type": "Bearer",
+#                 "user" : existing_user.model_dump(include=['role', 'name'])
+#             }
+#         }
+#     )
 
 # @router.post("/register", name="auth.register")
 # async def create_user(
@@ -162,20 +162,20 @@ async def reset_password(
 
     return JSONResponse(status_code=200, content={"message" : message})
 
-@router.get("/me", name="auth.me")
-async def who_me(
-        request: Request,
-        user= Depends(get_current_user),
-    ) -> JSONResponse:
+# @router.get("/me", name="auth.me")
+# async def who_me(
+#         request: Request,
+#         user= Depends(get_current_user),
+#     ) -> JSONResponse:
 
-    """
-        Route qui permet de retourner les informations de l'utilisateur actuellement connecté via son token
-    """
+#     """
+#         Route qui permet de retourner les informations de l'utilisateur actuellement connecté via son token
+#     """
 
-    return JSONResponse(status_code=200, content={
-        "message" : "OK",
-        "data" : {
-            "user" : user.model_dump(include=['role', 'name'])
-        }
-    })
+#     return JSONResponse(status_code=200, content={
+#         "message" : "OK",
+#         "data" : {
+#             "user" : user.model_dump(include=['role', 'name'])
+#         }
+#     })
 

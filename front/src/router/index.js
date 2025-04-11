@@ -50,15 +50,16 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.auth && !authService.isAuthenticated()) {
-    next("/login");
+
+  if(store.user.loading){
+    return next();
   }
-  else if (to.meta.is_admin && !store.user.isAdmin()) {
+
+  if (to.meta.is_admin && !store.user.isAdmin()) {
     next("/");
   }
-  else {
-    next();
-  }
+
+  next();
 });
 
 export default router

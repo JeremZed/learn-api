@@ -5,15 +5,12 @@ import { useI18n } from "vue-i18n";
 import { useHead } from "@vueuse/head";
 import { authService } from "@/services/authService.js";
 import BaseForm from "@/components/forms/BaseForm.vue";
-import NotificationContainer from '@/components/notification/NotificationContainer.vue';
-
 
 import store from "@/stores/index.js";
 import { LAYOUTS } from "@/constants.js";
 
 const { t } = useI18n();
 const router = useRouter();
-const notificationRef = ref();
 
 // Meta
 useHead({
@@ -37,18 +34,10 @@ const fields = computed(() =>  [
 // Callback à lancer lors de la soumission du formulaire
 const handleSubmit = async (formData) => {
       return await authService.register(formData).then( (response) => {
-        notificationRef.value.showNotification(t('signup_success'), 'success')
+        store.notification.showNotification(t('signup_success'), 'success')
+        router.push("/login");
         return response
       })
-    //   .then((response) => {
-    //   // if( typeof response?.data?.token != "undefined"){
-    //   //   store.user.setUser(response.data.user, response.data.token);
-    //   //   store.switcher.setLayout(LAYOUTS.DASHBOARD);
-    //   //   router.push("/");
-    //   // }
-    //   // console.log(response)
-    //   return response
-    // })
 };
 
 // Callback à lancer une fois que le formulaire a été soumis avec succès
@@ -66,7 +55,6 @@ const submitDone = (result) => { console.log(result) }
     :submitHandler="handleSubmit"
     className="form-small shadow"
      />
-     <NotificationContainer ref="notificationRef" />
      <div class="align-center"><router-link to="/login">{{ $t('already_account_?') }}</router-link></div>
   </div>
 </template>

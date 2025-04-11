@@ -4,15 +4,17 @@ import time
 import random
 from datetime import datetime, timedelta, timezone
 from typing import Optional
-from fastapi import HTTPException, Security, Depends, Request
-from fastapi.security import OAuth2PasswordBearer
+from fastapi import HTTPException, Depends, Request
+
 from core.config import get_settings
-from core.tools import hash_password
-from pymongo.collection import Collection
+from core.tools import hash_password, clean_item
+from core.models.user import User
 from core.database import database
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+from pymongo.collection import Collection
 
+from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
+from bson import ObjectId
 
 def get_db() -> Collection:
     """
@@ -68,48 +70,40 @@ def verify_token(token: str) -> dict:
 
 async def get_current_user(
         request: Request,
-        token: str = Security(oauth2_scheme),
         db=Depends(get_db)
         ):
     """
         Permet de retourner l'utilisateur derrière le token
     """
 
-    # if not token:
-    #     raise HTTPException(status_code=401, detail="Missing authentication token")
+    token = request.cookies.get("access_token")
 
-    # payload = verify_token(token)
-    # user_id: str = payload.get("id")
+    if not token:
+        raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Missing authentication token")
 
-    # if user_id is None:
-    #     raise HTTPException(status_code=401, detail="Token is invalid")
+    payload = verify_token(token)
+    user_id: str = payload.get("id")
 
-    # collection = db.get_collection("users")
-    # existing_user = await collection.find_one({"_id": ObjectId(user_id)})
+    if user_id is None:
+        raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Token is invalid")
 
-    # user = UserCurrent(
-    #     username=existing_user['username'],
-    #     email=existing_user['email'],
-    #     name=existing_user['name'],
-    #     role=existing_user.get('role', ROLE_NONE),
-    # )
+    collection = db.get_collection("users")
+    user =  clean_item( await collection.find_one({"_id": ObjectId(user_id)}), model=User)
 
-    # request.state.current_user = user
-    # return user
-    return False
+    request.state.current_user = user
+    return user
 
 async def check_is_admin(request: Request):
     """
         Permet de checker si l'utilisateur en cours est un admin
     """
 
-    # current_user = getattr(request.state, "current_user", None)
+    current_user = getattr(request.state, "current_user", None)
 
-    # if isinstance(current_user, UserCurrent) == False:
-    #     raise HTTPException(status_code=403, detail="Forbidden")
+    if isinstance(current_user, User) == False:
+        raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="Forbidden")
 
-    # if current_user.is_admin() == False:
-    #     raise HTTPException(status_code=403, detail="Forbidden")
+    if current_user.is_admin() == False:
+        raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="Forbidden")
 
-    # return True
-    return False
+    return True

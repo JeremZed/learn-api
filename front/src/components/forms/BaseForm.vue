@@ -10,7 +10,8 @@ const props = defineProps({
   buttons: Array,
   className: String,
   id: String,
-  submitHandler: Function
+  submitHandler: Function,
+  errorMessage: String
 });
 
 // Défintion des events à émettre
@@ -76,6 +77,10 @@ const handleSubmit = (e) => {
 
 <template>
   <form @submit.prevent="handleSubmit" :class="['form', className]" :id="id" >
+
+
+    <div v-if="errorMessage" class="alert error">{{ errorMessage }}</div>
+
     <div v-for="field in fields" :key="field.name" class="form-group">
       <label :for="field.name">{{ field.label }}</label>
 

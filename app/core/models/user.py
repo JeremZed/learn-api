@@ -71,3 +71,6 @@ class User(UserBase):
     token_password_dt: Optional[float] = 0.0
     auth_two_factor: Optional[bool] = False
     failed_login_attempts: int = 0
+
+    def is_admin(self) -> bool:
+        return UserRole.admin in self.roles

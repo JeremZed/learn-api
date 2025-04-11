@@ -3,7 +3,7 @@ import {ref} from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faUser, faArrowRight, faArrowLeft, faCog, faHome } from "@fortawesome/free-solid-svg-icons";
 
-const isCollapsed = ref(false);
+const isCollapsed = ref(true);
 const isMobileOpen = ref(false);
 
 const toggleLeftMenu = () => {
