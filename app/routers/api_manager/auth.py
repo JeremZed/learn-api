@@ -1,15 +1,18 @@
 from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import JSONResponse
-from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY, HTTP_200_OK, HTTP_201_CREATED
+from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY, HTTP_200_OK, HTTP_201_CREATED, HTTP_401_UNAUTHORIZED
 
-from dependencies import get_db, get_settings, get_token_access, get_current_user, get_token_password
+from dependencies import get_db, get_settings, generate_token, get_current_user, get_token_password
 
 from core.tools import translate, verify_password, clean_item, hash_password
 from core.forms.front import FormRegister, FormLogin,FormQueryResetPassword, FormResetPassword
 from core.models.user import UserCreate, User, UserOut
+from core.exceptions import CustomHttpException
 
 from repo.user import UserRepository
 import time
+from datetime import timedelta
+import jwt
 
 router = APIRouter(prefix=f"/auth", tags=["auth"])
 
@@ -87,7 +90,18 @@ async def login(
                 "data": [ ]
             } )
 
-    access_token = get_token_access(data={'id' : existing_user.id }, settings=settings)
+
+    user_data = {"id": existing_user.id}
+
+    access_token = generate_token(
+        data=user_data,
+        expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    )
+
+    refresh_token = generate_token(
+        data=user_data,
+        expires_delta=timedelta(days=7)
+    )
 
     message = translate(request, "user_logged_successfully")
 
@@ -101,20 +115,54 @@ async def login(
         }
     )
 
-    response.set_cookie(
-        key="access_token",
-        value=access_token,
-        httponly=True,
-        secure=False,
-        samesite="Strict",
-        max_age=3600,
-        path="/"
+    response.set_cookie("access_token", access_token, httponly=True, secure=False, max_age=1800, path="/", samesite="Strict")
+    response.set_cookie("refresh_token", refresh_token, httponly=True, secure=False, max_age=604800, path="/", samesite="Strict")
+
+    return response
+
+@router.post("/refresh", name="auth.refresh")
+async def refresh_token_route(request: Request, settings=Depends(get_settings)):
+
+    refresh_token = request.cookies.get("refresh_token")
+
+    if not refresh_token:
+        raise CustomHttpException(
+            flag="missing_refresh_token",
+            message=translate(request, "missing_refresh_token"),
+            status_code=HTTP_401_UNAUTHORIZED
+        )
+
+    try:
+        payload = jwt.decode(refresh_token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        user_id = payload.get("id")
+    except jwt.ExpiredSignatureError:
+        raise CustomHttpException(
+            flag="expired_refresh_token",
+            message=translate(request, "expired_refresh_token"),
+            status_code=HTTP_401_UNAUTHORIZED
+        )
+    except jwt.PyJWTError:
+        raise CustomHttpException(
+            flag="invalid_refresh_token",
+            message=translate(request, "invalid_refresh_token"),
+            status_code=HTTP_401_UNAUTHORIZED
+        )
+
+    new_access_token = generate_token(
+        data={"id": user_id},
+        expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     )
+
+    response = JSONResponse(
+        status_code=200,
+        content={"message": "Access token refreshed"}
+    )
+
+    response.set_cookie("access_token", new_access_token, httponly=True, max_age=1800, path="/", samesite="Strict")
     return response
 
 @router.get("/me", name="auth.me")
 async def who_me(
-        request: Request,
         user= Depends(get_current_user),
     ) -> JSONResponse:
 

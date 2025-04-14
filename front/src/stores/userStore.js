@@ -28,9 +28,8 @@ export const userStore = reactive({
         if (response?.data?.user) {
           this.setUser(response.data.user);
         }
-
     } catch (error) {
-      throw new Error("Erreur lors de la récupération de l'utilisateur :", error);
+      throw error;
     }
   }
 });

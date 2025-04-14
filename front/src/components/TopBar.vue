@@ -44,8 +44,8 @@ onUnmounted(() => {
       </div>
 
       <div v-if="isMenuOpen" class="dropdown-menu right">
-        <router-link to="/profil" @click="closeMenu">
-          <font-awesome-icon :icon="faUser" /> {{ $t("profile") }}
+        <router-link :to="{name:'account'}" @click="closeMenu">
+          <font-awesome-icon :icon="faUser" /> {{ $t("my_account") }}
         </router-link>
         <router-link v-if="isAdmin" to="/admin" @click="closeMenu">
           <font-awesome-icon :icon="faUserShield" /> {{ $t("admin_panel") }}

@@ -43,7 +43,7 @@ export const authService = {
       return response.data;
     } catch (error) {
       store.user.logout();
-      throw "Impossible de récupérer l'utilisateur.";
+      throw error.response.data;
     }
   }
 };

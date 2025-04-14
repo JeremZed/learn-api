@@ -35,9 +35,14 @@ const layoutComponent = computed(() => {
 
 onMounted(async () => {
   await store.user.init()
-  .then(() => { router.push("/"); })
-  .catch( () => {
-    // router.push('/login')
+  .then(() => {
+
+  })
+  .catch( (error) => {
+    console.log(error)
+    if( error.flag.indexOf('token') > -1 ){
+      router.push('/login')
+    }
   });
 });
 

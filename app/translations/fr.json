@@ -14,5 +14,9 @@
     "admin_users_email_already_exist" : "Il existe déjà un compte avec cette adresse email",
     "admin_users_created" : "Utilisateur créé avec succès",
     "admin_user_deleted" : "Utilisateur supprimé avec succès",
-    "admin_users_delete_admin" : "Impossible de supprimer l'utilisateur Admin"
+    "admin_users_delete_admin" : "Impossible de supprimer l'utilisateur Admin",
+    "missing_token" : "Token absent",
+    "invalid_token" : "Token invalide",
+    "expired_token" : "Token expérié",
+    "forbidden" : "Accès interdit"
 }

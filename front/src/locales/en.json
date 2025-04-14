@@ -56,5 +56,19 @@
     "seo_meta_description_reset_password" : "Password reset page",
     "new_password" : "New password",
     "token_placeholder" : "Token",
-    "token" : "Token"
+    "token" : "Token",
+    "missing_token" : "Missing token",
+    "title_security" : "Security",
+    "description_security" : "Change password...",
+    "title_my_informations" : "Mes informations",
+    "description_my_informations" : "Civilité, Adresse de facturation...",
+    "to_access" : "To access",
+    "page_account_title" : "My account",
+    "my_account" : "My account",
+    "page_security_title" : "Security",
+    "page_information_title" : "My informations",
+    "breadcrumb_home" : "Home",
+    "breadcrumb_account" : "Account",
+    "breadcrumb_security" : "Security",
+    "breadcrumb_information" : "Informations"
 }

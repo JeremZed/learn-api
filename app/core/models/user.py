@@ -4,6 +4,15 @@ import re
 from core.tools import hash_password
 from enum import Enum
 
+def check_valid_password(v):
+    """
+        Permet de checker si le mot de passe correspond aux critères
+    """
+    if len(v) <= 3:
+            raise ValueError("Le mot de passe doit faire au moins 3 caractères.")
+    return hash_password(v)
+
+
 class UserRole(str, Enum):
     """
         Classe représentant les rôles disponible pour un User
@@ -44,9 +53,7 @@ class UserCreate(UserBase):
     @field_validator("password")
     @classmethod
     def validate_password(cls, v):
-        if len(v) <= 3:
-            raise ValueError("Le mot de passe doit faire au moins 3 caractères.")
-        return hash_password(v)
+        return check_valid_password(v)
 
     roles: List[UserRole] = [UserRole.user]
 

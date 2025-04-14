@@ -2,7 +2,7 @@ from fastapi import Request
 from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 from fastapi.exceptions import RequestValidationError
-from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY
+from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY, HTTP_400_BAD_REQUEST
 
 def get_msg_errors_validation(exc: ValidationError) -> list:
     """
@@ -36,3 +36,10 @@ async def model_validation_exception_handler(request: Request, exc: ValidationEr
             "data": errors
         }
     )
+
+class CustomHttpException(Exception):
+    def __init__(self, flag: str, message: str, status_code: int = HTTP_400_BAD_REQUEST, data=None):
+        self.flag = flag
+        self.message = message
+        self.status_code = status_code
+        self.data = data or []

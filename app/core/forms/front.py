@@ -29,3 +29,10 @@ class FormResetPassword(BaseModel):
     email: str
     password: str
     token: str
+
+class FormChangePassword(BaseModel):
+    """
+        Formulaire de modification du mot de passe - Front > Account > Security
+    """
+    current_password: str
+    new_password: str

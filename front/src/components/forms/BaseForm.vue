@@ -142,8 +142,8 @@ const handleSubmit = (e) => {
         </div>
     </div>
 
-    <div class="form-group">
-      <button type="submit">{{ submitLabel }}</button>
+    <div class="form-group buttons">
+
 
       <!-- Boutons supplémentaires -->
       <button
@@ -151,9 +151,12 @@ const handleSubmit = (e) => {
         :key="btn.label"
         type="button"
         @click="btn.action(modelValue)"
+        :class="btn.class"
       >
         {{ btn.label }}
       </button>
+
+      <button type="submit">{{ submitLabel }}</button>
     </div>
   </form>
 </template>
